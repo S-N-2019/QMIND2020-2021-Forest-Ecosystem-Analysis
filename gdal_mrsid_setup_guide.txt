@@ -1,0 +1,59 @@
+GDAL MrSID Setup Guide
+January 2021
+By Sarah Nassar (Queen's University)
+
+1) To view:
+  - QGIS (https://www.qgis.org/en/site/forusers/download.html, "Standalone Installer", drag and drop image files, can convert to other file formats)
+  - fGIS (https://www.forestpal.com/fgis.html, click on "Download a free, unlimited copy.", this is a simpler installation than QGIS, mainly for viewing)
+
+
+2) Python (3.7, 3.6, 3.5, 3.4 [3.x versions are better for machine learning and are more up to date, these are the ones supported by GDAL in addition to 2.7]):
+  - https://www.python.org/downloads/windows/ (64-bit)
+
+
+3) For GDAL in Python (latest is 3.2.1):
+
+ Installations:
+  - From https://www.gisinternals.com:
+     - https://download.gisinternals.com/sdk/downloads/release-1928-x64-gdal-3-2-1-mapserver-7-6-2/gdal-302-1928-x64-core.msi
+     - https://download.gisinternals.com/sdk/downloads/release-1911-x64-gdal-3-2-0-mapserver-7-6-1/gdal-302-1911-x64-mrsid.msi (older version of MrSID plug-in required)
+     - https://download.gisinternals.com/sdk/downloads/release-1928-x64-gdal-3-2-1-mapserver-7-6-2/GDAL-3.2.1.win-amd64-py3.7.msi (for Python 3.7)
+
+ Instructions (https://sandbox.idre.ucla.edu/sandbox/tutorials/installing-gdal-for-windows):
+  - Right click on "This PC" on the desktop and go to "Properties"
+  - Click on "Advanced System Properties"
+  - Select "Environment Variables"
+  - Under the "User variables for admin" pane, find the "Path" variable, then click "Edit" and add: C:\...\Python37
+  - Under the "System variables" pane, find the "Path" variable, then click on "Edit"
+  - Go to the end of the box and copy and paste the following: C:\Program Files\GDAL
+  - In the same "System variables" pane, click on "New" and then add the following in the dialogue box:
+     Variable name: GDAL_DATA
+     Variable value: C:\Program Files\GDAL\gdal-data
+  - Add another one by clicking on "New" and then add the following in the dialogue box:
+     Variable name: GDAL_DRIVER_PATH
+     Variable value: C:\Program Files\GDAL\gdalplugins
+
+
+4) Testing:
+  - Useful resource: https://www.gis.usu.edu/~chrisg/python/2009/lectures/ospy_slides4.pdf
+  - Open a Notepad, select the "Save as type:" drop down, choose "All Files (*.*)", and save the file as "sidTest.py"
+  - Copy and paste the following:
+
+#begin sidTest.py
+from osgeo import gdal
+
+fn = "C://...//file_name.sid"
+ds = gdal.Open(fn)
+if ds is None:
+  print ("Could not open" + fn)
+
+cols = ds.RasterXSize
+rows = ds.RasterYSize
+bands = ds.RasterCount
+print ("cols: ", cols)
+print ("rows: ", rows)
+print ("bands: ", bands)
+#end sidTest.py
+
+  - Open command prompt and change the directory to where sidTest.py is located: cd C:\...
+  - Run the program by typing: python sidTest.py
